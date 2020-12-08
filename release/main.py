@@ -1,7 +1,7 @@
 from functools import partial
 from UI.mainUI import Main
 from UI.addEditCoffeeForm import DialogForm
-from PyQt5 import uic, QtWidgets
+from PyQt5 import QtWidgets
 import sys
 import sqlite3
 
