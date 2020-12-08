@@ -1,13 +1,14 @@
 from functools import partial
+from UI.mainUI import Main
+from UI.addEditCoffeeForm import DialogForm
 from PyQt5 import uic, QtWidgets
 import sys
 import sqlite3
 
 
-class Dialog(QtWidgets.QWidget):
+class Dialog(DialogForm):
     def __init__(self):
         super().__init__()
-        uic.loadUi("addEditCoffeeForm.ui", self)
 
     def show(self, set_default=False):
         if set_default:
@@ -52,10 +53,9 @@ class Dialog(QtWidgets.QWidget):
         self.package_size_field.setValue(package_size)
 
 
-class MainWindow(QtWidgets.QWidget):
+class MainWindow(Main):
     def __init__(self, db_name):
         super().__init__()
-        uic.loadUi("main.ui", self)
         self.db_name = db_name
         self.conn = sqlite3.connect(db_name)
         self.dialog = Dialog()
@@ -141,9 +141,13 @@ class MainWindow(QtWidgets.QWidget):
             self.conn.commit()
             self.fill_table()
 
+    def closeEvent(self, event):
+        self.conn.close()
+        event.accept()
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    window = MainWindow("coffee.sqlite")
+    window = MainWindow("data/coffee.sqlite")
     window.show()
     sys.exit(app.exec())
